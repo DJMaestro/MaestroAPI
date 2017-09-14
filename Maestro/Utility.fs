@@ -14,7 +14,7 @@ let randomStr len =
     let randomChars = [|for i in 0..len -> chars.[random.Next(charsLen)]|]
     new System.String(randomChars)
 
-let fromJson= Json.parse >> Json.deserialize
+//let fromJson= Json.parse >> Json.deserialize
       
 let JSON v =
     let settings = new JsonSerializerSettings()

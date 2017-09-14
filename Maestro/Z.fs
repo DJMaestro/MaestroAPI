@@ -9,4 +9,7 @@ let main argv =
                 | _ -> "balls"
         
     printfn "%A" s
-    0 // return an integer exit code
+     // return an integer exit code
+
+    printfn "Hello"
+    0
