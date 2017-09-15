@@ -8,13 +8,21 @@ module AST =
      
     type Input = {_type: Mtype; name: string;} 
     
-    type Referral = {
+    type Instruction = Left | Right
+    
+    type PathFromOrigin = list<Instruction>
+
+    type PipeLocation = Origin | Coordinates of PathFromOrigin
+
+    type Action = Next | Recursive of (PipeLocation *  int) | None 
+
+    type Reference = {
         program_id: string
         program_name: string
         return_type: Mtype
         index: int
         input: list<Input>
-        nextblock: int
+        next: Action
     }
     
     type Lamda = {
@@ -22,10 +30,10 @@ module AST =
         index: int
         input: list<Input>
         statement: string
-        nextblock: int 
+        next: Action 
     } 
     
-    type ProgramBlock = Referral | Lamda
+    type ProgramBlock = Reference | Lamda
     
     type IOFile = Main | Child 
     
@@ -41,22 +49,37 @@ module AST =
     
     type Access = Public | Private
     
+    type Pipe = list<ProgramBlock>
+
+   
+  //this is a good example of using type generics for circular dependent types 
+    type Fork<'a> = {
+      main: Pipe
+      bool: ProgramBlock
+      left: 'a
+      right: 'a
+    }
+
+    type PipeLine<'a> = 
+      |  ForkLess of Pipe
+      | Fork of 'a  Fork 
+    
     type Program = {
-        id: string
-        name: string
-        package: string
+        id:  string Option
+        name: string Option
+        package: string Option
         _type: ComputationType
         return_type: Mtype
         dependencies: list<Dependency>
         inputs: list<Input>
-        pipeline: list<ProgramBlock>
-        description: string
-        html_description: string
-        valid: Validation
-        version: string
-        author: Author
-        access: Access
-        subProgram: list<int>
+        pipe: Program PipeLine
+        location: PipeLocation
+        description: string Option
+        html_description: string Option
+        valid: Validation Option
+        version: string Option
+        author: Author Option
+        access: Access Option
         globals: list<string>
     }
     
